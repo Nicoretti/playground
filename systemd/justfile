@@ -1,0 +1,23 @@
+# Make unit file available for systemd
+[group: 'service']
+link:
+    @sudo cp playground.service /etc/systemd/system/playground.service
+
+# Remove unit file
+[group: 'service']
+unlink:
+    @sudo rm /etc/systemd/system/playground.service
+
+[group: 'service']
+update: unlink link
+    @sudo systemctl status playground.service || true
+
+[group: 'service']
+start: update
+    @sudo systemctl start playground.service
+
+[group: 'service']
+log:
+    # short version of options -xeu playground.service
+    journalctl --catalog --pager-end --unit=playground.service
+
