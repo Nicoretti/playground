@@ -3,17 +3,15 @@ Description=Playground service to understand systemd units
 After=network.target
 
 [Service]
-User=1000
-Group=1000
-ExecStartPre=uv run --script /home/nicoretti/Projects/playground/systemd/pre-start.py
-ExecStart=uv run --script /home/nicoretti/Projects/playground/systemd/service.py
+User=nicoretti
+Group=nicoretti
+ExecStartPre=/home/nicoretti/.local/bin/uv run --script /home/nicoretti/Projects/playground/systemd/pre-start.py
+ExecStart=/home/nicoretti/.local/bin/uv run --script /home/nicoretti/Projects/playground/systemd/service.py
 # ExecStop=docker stop <container> 
 # ExecStop=docker rm -f <container>
 Restart=always
 RestartSec=5
-Environment="PATH=/home/nicoretti/.local/bin:/usr/local/bin:/usr/bin:/bin"
 
 [Install]
 WantedBy=multi-user.target
-
 
