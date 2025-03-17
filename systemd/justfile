@@ -8,14 +8,17 @@ link:
 unlink:
     @sudo rm /etc/systemd/system/playground.service
 
+# Update systemd file seen by systemd
 [group: 'service']
 update: unlink link
     @sudo systemctl status playground.service || true
 
+# Start the service
 [group: 'service']
 start: update
     @sudo systemctl start playground.service
 
+# Show the journalctl log for the service
 [group: 'service']
 log:
     # short version of options -xeu playground.service
