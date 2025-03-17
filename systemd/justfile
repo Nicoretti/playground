@@ -1,26 +1,35 @@
-# Make unit file available for systemd
+default := "playground"
+
+# Make unit files available for systemd
 [group: 'service']
 link:
     @sudo cp playground.service /etc/systemd/system/playground.service
+    @sudo cp env.service /etc/systemd/system/env.service
 
-# Remove unit file
+# Remove unit files
 [group: 'service']
 unlink:
     @sudo rm /etc/systemd/system/playground.service
+    @sudo rm /etc/systemd/system/env.service
 
-# Update systemd file seen by systemd
+# Updates systemd file's seen by systemd
 [group: 'service']
 update: unlink link
-    @sudo systemctl status playground.service || true
+    @sudo systemctl daemon-reload
+
+# Print status of service unit
+[group: 'service']
+status service=default:
+    @sudo systemctl status {{service}}.service || true
 
 # Start the service
 [group: 'service']
-start: update
-    @sudo systemctl start playground.service
+start service=default:
+    @sudo systemctl start {{service}}.service
 
 # Show the journalctl log for the service
 [group: 'service']
-log:
-    # short version of options -xeu playground.service
-    journalctl --catalog --pager-end --unit=playground.service
+log service=default:
+    # short version of options -xeu <unit>
+    journalctl --catalog --pager-end --unit={{service}}.service
 
